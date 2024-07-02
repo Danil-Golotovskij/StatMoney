@@ -55,7 +55,7 @@
                 <span th:if="${profitUsd[asset.ticker] == 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.ticker], 1, 2)} %|" class="profit-neutral"></span>
             </td>
             <td>
-                <form th:action="@{/portfolio/delete/{id}(id=${asset.ticker})}" method="post">
+                <form th:action="@{/portfolio/delete/{name}(name=${asset.name})}" method="post">
                     <button type="submit">Удалить</button>
                 </form>
             </td>

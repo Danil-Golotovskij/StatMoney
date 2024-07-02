@@ -106,9 +106,16 @@ public class PortfolioController {
         return "redirect:/portfolio";
     }
 
-    @PostMapping("/portfolio/delete/{id}")
-    public String deleteAsset(@PathVariable Long id) {
-        assetService.deleteAsset(id);
+    @PostMapping("/portfolio/delete/{name}")
+    public String deleteAssetsByName(@PathVariable String name) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails myUserDetails = (MyUserDetails) auth.getPrincipal();
+        User user = myUserDetails.getUser();
+        Optional<Portfolio> portfolioOpt = portfolioService.findByUser(user);
+        if (portfolioOpt.isPresent()) {
+            assetService.deleteAssetsByPortfolioIdAndName(portfolioOpt.get().getId(), name);
+        }
+
         return "redirect:/portfolio";
     }
 
