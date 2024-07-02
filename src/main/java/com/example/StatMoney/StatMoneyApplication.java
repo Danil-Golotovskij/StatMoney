@@ -29,3 +29,4 @@ public class StatMoneyApplication implements CommandLineRunner {
 
     }
 }
+
