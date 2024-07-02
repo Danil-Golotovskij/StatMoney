@@ -65,8 +65,18 @@
 
     <div>
         <h3>Общая стоимость портфеля</h3>
-        <p>Общая стоимость (RUB): <span th:text="${totalValueRub}"></span></p>
-        <p>Общая стоимость (USD): <span th:text="${totalValueUsd}"></span></p>
+        <p>Общая стоимость (RUB):
+            <span th:text="${totalValueRub}"></span>
+            <span th:if="${portfolioChangePercentRub > 0}" th:classappend="' profit-positive'" th:text="${'(+' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
+            <span th:if="${portfolioChangePercentRub < 0}" th:classappend="' profit-negative'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
+            <span th:if="${portfolioChangePercentRub == 0}" th:classappend="' profit-neutral'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
+        </p>
+        <p>Общая стоимость (USD):
+            <span th:text="${totalValueUsd}"></span>
+            <span th:if="${portfolioChangePercentUsd > 0}" th:classappend="' profit-positive'" th:text="${'(+' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
+            <span th:if="${portfolioChangePercentUsd < 0}" th:classappend="' profit-negative'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
+            <span th:if="${portfolioChangePercentUsd == 0}" th:classappend="' profit-neutral'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
+        </p>
     </div>
 
     <a th:href="@{/portfolio/add}" class="btn btn-primary">Добавить новый актив</a>

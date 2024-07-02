@@ -11,10 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class PortfolioController {
@@ -46,6 +44,10 @@ public class PortfolioController {
             float usdToRubRate = cbrService.getCurrentCurrencyRate("USD");
 
             Map<String, AggregatedAsset> aggregatedAssetsMap = new HashMap<>();
+            float investedSumRub = 0;  // Потраченная сумма в RUB
+            float currentPortfolioValueRub = 0;  // Текущая стоимость портфеля в RUB
+            float investedSumUsd = 0;  // Потраченная сумма в USD
+            float currentPortfolioValueUsd = 0;  // Текущая стоимость портфеля в USD
 
             for (Asset asset : assets) {
                 String ticker = getTickerOfAsset(asset);
@@ -61,16 +63,23 @@ public class PortfolioController {
                         (float) ((aggregatedAsset.getAveragePurchasePriceUsd() * (aggregatedAsset.getTotalQuantity() - asset.getQuantity())
                                 + asset.getPurchasePriceUsd() * asset.getQuantity()) / aggregatedAsset.getTotalQuantity()));
 
+                //Получаем текущую цену актива
                 float currentPriceRub = getCurrentAssetPrice(asset);
                 aggregatedAsset.setCurrentPriceRub(currentPriceRub);
                 aggregatedAsset.setCurrentPriceUsd(currentPriceRub / usdToRubRate);
 
                 aggregatedAssetsMap.put(ticker, aggregatedAsset);
+
+                //Рассчитываем потраченную сумму
+                investedSumRub += asset.getPurchasePriceRub() * asset.getQuantity();
+                investedSumUsd += asset.getPurchasePriceUsd() * asset.getQuantity();
+                //Рассчитываем текущую стоимость портфеля
+                currentPortfolioValueRub += currentPriceRub * asset.getQuantity();
+                currentPortfolioValueUsd += (currentPriceRub / usdToRubRate) * asset.getQuantity();
             }
 
             Map<String, Float> profitRub = new HashMap<>();
             Map<String, Float> profitUsd = new HashMap<>();
-            float totalValueRub = 0;
 
             for (AggregatedAsset asset : aggregatedAssetsMap.values()) {
                 float profitRubPercent = ((asset.getCurrentPriceRub() - asset.getAveragePurchasePriceRub()) / asset.getAveragePurchasePriceRub()) * 100;
@@ -78,15 +87,20 @@ public class PortfolioController {
 
                 profitRub.put(asset.getTicker(), profitRubPercent);
                 profitUsd.put(asset.getTicker(), profitUsdPercent);
-
-                totalValueRub += asset.getCurrentPriceRub() * asset.getTotalQuantity();
             }
+
+            //Расчет разницы в процентах
+            float portfolioChangePercentRub = ((currentPortfolioValueRub - investedSumRub) / investedSumRub) * 100;
+            float portfolioChangePercentUsd = ((currentPortfolioValueUsd - investedSumUsd) / investedSumUsd) * 100;
 
             model.addAttribute("assets", aggregatedAssetsMap.values());
             model.addAttribute("profitRub", profitRub);
             model.addAttribute("profitUsd", profitUsd);
-            model.addAttribute("totalValueRub", totalValueRub);
-            model.addAttribute("totalValueUsd", totalValueRub / usdToRubRate);
+            model.addAttribute("totalValueRub", currentPortfolioValueRub);
+            model.addAttribute("totalValueUsd", currentPortfolioValueUsd);
+            model.addAttribute("portfolioChangePercentRub", portfolioChangePercentRub);
+            model.addAttribute("portfolioChangePercentUsd", portfolioChangePercentUsd);
+
         } else {
             model.addAttribute("message", "No portfolio found for user");
         }
