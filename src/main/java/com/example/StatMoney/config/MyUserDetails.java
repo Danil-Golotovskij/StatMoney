@@ -12,38 +12,48 @@ import java.util.stream.Collectors;
 public class MyUserDetails implements UserDetails {
 
     private User user;
-    public MyUserDetails(User user)
-    {
+    public MyUserDetails(User user) {
         this.user = user;
     }
+
+    public User getUser() {
+        return user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.stream(user.getRole().split(", "))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+
     @Override
     public String getPassword() {
         return user.getPassword();
     }
+
     @Override
     public String getUsername() {
         return user.getEmail();
     }
+
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
+
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
+
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
+
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
 }

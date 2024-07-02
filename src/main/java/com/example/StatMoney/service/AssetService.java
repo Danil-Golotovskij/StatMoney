@@ -4,7 +4,6 @@ import com.example.StatMoney.entity.Asset;
 import com.example.StatMoney.repository.AssetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +42,14 @@ public class AssetService {
 
     public void deleteAsset(Long id) {
         assetRepository.deleteById(id);
+    }
+
+    public void deleteAssetsByPortfolioIdAndName(Long portfolioId, String name) {
+        List<Asset> assets = assetRepository.findByPortfolioIdAndName(portfolioId, name);
+        assetRepository.deleteAll(assets);
+    }
+
+    public List<Asset> findByPortfolioId(Long portfolioId) {
+        return assetRepository.findByPortfolioId(portfolioId);
     }
 }
