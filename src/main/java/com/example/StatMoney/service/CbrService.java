@@ -29,6 +29,13 @@ public class CbrService {
         return parseCurrencyRate(responseEntity.getBody(), currencyCode);
     }
 
+    //Формат даты dd/MM/yyyy
+    public float getCurrentCurrencyRate(String currencyCode, String date) {
+        String url = "https://www.cbr.ru/scripts/XML_daily.asp?date_req=" + date;
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        return parseCurrencyRate(responseEntity.getBody(), currencyCode);
+    }
+
     private String getCurrentDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.now().format(formatter);
