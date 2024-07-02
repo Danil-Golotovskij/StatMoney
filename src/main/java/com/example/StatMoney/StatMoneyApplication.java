@@ -26,6 +26,8 @@ public class StatMoneyApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        System.out.println(cbrService.getCurrentCurrencyRate("USD", "01/07/2024"));
+        System.out.println(cbrService.getCurrentCurrencyRate("USD"));
+        System.out.println(cbrService.getCurrentCurrencyRate("USD", "02/07/2024"));
     }
 }
