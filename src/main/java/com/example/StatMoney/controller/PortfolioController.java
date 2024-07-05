@@ -155,9 +155,9 @@ public class PortfolioController {
 
     private float getCurrentAssetPrice(Asset asset) {
         return switch (asset) {
-            case Bond bond -> (float) moexService.getCurrentBondPrice(bond.getTicker());
-            case Cryptocurrency cryptocurrency -> (float) cryptoCompareService.getCryptoPrice(cryptocurrency.getTicker());
-            case Share share -> (float) moexService.getCurrentPrice(share.getTicker());
+            case Bond bond -> moexService.getCurrentBondPrice(bond.getTicker());
+            case Cryptocurrency cryptocurrency -> cryptoCompareService.getCryptoPrice(cryptocurrency.getTicker());
+            case Share share -> moexService.getCurrentPrice(share.getTicker());
             case null, default -> 0;
         };
     }

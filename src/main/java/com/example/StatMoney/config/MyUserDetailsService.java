@@ -22,6 +22,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
 
         return user.map(MyUserDetails::new)
-                .orElseThrow(()->new UsernameNotFoundException(username + "There is not such user in REPO"));
+                .orElseThrow(()->new UsernameNotFoundException(STR."\{username}There is not such user in REPO"));
     }
 }

@@ -1,6 +1,7 @@
 package com.example.StatMoney.config;
 
 import com.example.StatMoney.entity.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,15 +10,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+@Getter
 public class MyUserDetails implements UserDetails {
 
-    private User user;
+    private final User user;
     public MyUserDetails(User user) {
         this.user = user;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     @Override
