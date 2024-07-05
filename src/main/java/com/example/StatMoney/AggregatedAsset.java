@@ -9,7 +9,7 @@ public class AggregatedAsset {
     private String category;
     private float averagePurchasePriceRub;
     private float averagePurchasePriceUsd;
-    private int totalQuantity;
+    private double totalQuantity;
     private float currentPriceRub;
     private float currentPriceUsd;
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -53,10 +53,23 @@
                                                 <label class="form-label" for="form3Example4cg">Пароль</label>
                                             </div>
 
+                                            <div data-mdb-input-init class="form-outline mb-4">
+                                                <input type="password" id="form3Example4cdg" name="confirmPassword" class="form-control form-control-lg" />
+                                                <label class="form-label" for="form3Example4cdg">Подтвердите пароль</label>
+                                            </div>
+
+
                                             <div class="d-flex justify-content-center">
                                                 <button type="submit"
-                                                    class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Зарегистрироваться</button>
+                                                    class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+                                                    Зарегистрироваться
+                                                </button>
                                             </div>
+
+                                            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                                                <span th:text="${errorMessage}"></span>
+                                            </div>
+
 
                                             <p class="text-center text-muted mt-5 mb-0">Нет аккаунта? <a
                                                     href="#!" class="fw-bold text-body"><u>Войти</u></a></p>
@@ -86,24 +99,3 @@
 </body>
 
 </html>
-
-
-<!--
-
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Регистрация</title>
-</head>
-<body>
-<h2>Регистрация пользователя</h2>
-<form action="/register" method="post">
-    <input type="email" name="email" placeholder="Email" required><br>
-    <input type="password" name="password" placeholder="Пароль" required><br>
-    <button type="submit">Зарегистрироваться</button>
-</form>
-</body>
-</html>
-
--->
