@@ -1,5 +1,9 @@
 package com.example.StatMoney;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import com.example.StatMoney.service.CbrService;
+import com.example.StatMoney.service.MoexService;
+import com.example.StatMoney.service.CryptoCompareService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,4 +20,3 @@ public class StatMoneyApplication implements CommandLineRunner {
 
     }
 }
-
