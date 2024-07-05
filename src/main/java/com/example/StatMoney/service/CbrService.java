@@ -24,14 +24,14 @@ public class CbrService {
     }
 
     public float getCurrentCurrencyRate(String currencyCode) {
-        String url = "https://www.cbr.ru/scripts/XML_daily.asp?date_req=" + getCurrentDate();
+        String url = STR."https://www.cbr.ru/scripts/XML_daily.asp?date_req=\{getCurrentDate()}";
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         return parseCurrencyRate(responseEntity.getBody(), currencyCode);
     }
 
     //Формат даты dd/MM/yyyy
     public float getCurrentCurrencyRate(String currencyCode, String date) {
-        String url = "https://www.cbr.ru/scripts/XML_daily.asp?date_req=" + date;
+        String url = STR."https://www.cbr.ru/scripts/XML_daily.asp?date_req=\{date}";
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         return parseCurrencyRate(responseEntity.getBody(), currencyCode);
     }
