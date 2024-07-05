@@ -11,15 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class StatMoneyApplication implements CommandLineRunner {
 
-    @Autowired
-    private CbrService cbrService;
-
-    @Autowired
-    private MoexService moexService;
-
-    @Autowired
-    private CryptoCompareService cryptoCompareService;
-
     public static void main(String[] args) {
         SpringApplication.run(StatMoneyApplication.class, args);
     }
