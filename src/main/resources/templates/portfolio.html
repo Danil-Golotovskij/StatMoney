@@ -31,6 +31,8 @@
             <th>Текущая цена (USD)</th>
             <th>Прибыль (RUB)</th>
             <th>Прибыль (USD)</th>
+            <th>Общая стоимость (RUB)</th>
+            <th>Общая стоимость (USD)</th>
             <th>Действия</th>
         </tr>
         </thead>
@@ -54,6 +56,8 @@
                 <span th:if="${profitUsd[asset.ticker] < 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.ticker], 1, 2)} %|" class="profit-negative"></span>
                 <span th:if="${profitUsd[asset.ticker] == 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.ticker], 1, 2)} %|" class="profit-neutral"></span>
             </td>
+            <td th:text="${#numbers.formatDecimal(asset.totalQuantity * asset.currentPriceRub, 1, 2)}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.totalQuantity * asset.currentPriceUsd, 1, 2)}"></td>
             <td>
                 <form th:action="@{/portfolio/delete/{name}(name=${asset.name})}" method="post">
                     <button type="submit">Удалить</button>
