@@ -26,6 +26,6 @@ public class StatMoneyApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        System.out.println(moexService.getAllSecurities("shares"));
     }
 }
