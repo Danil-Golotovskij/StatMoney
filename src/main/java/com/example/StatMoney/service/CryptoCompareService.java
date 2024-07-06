@@ -96,7 +96,7 @@ public class CryptoCompareService {
                 JsonNode coinData = field.getValue();
                 String fullName = coinData.path("FullName").asText();
                 String imageUrl = coinData.path("ImageUrl").asText();
-                String fullImageUrl = "https://www.cryptocompare.com" + imageUrl;
+                String fullImageUrl = STR."https://www.cryptocompare.com\{imageUrl}";
 
                 cryptocurrencies.add(Map.of("symbol", symbol, "fullName", fullName, "logo", fullImageUrl));
             }
@@ -112,10 +112,13 @@ public class CryptoCompareService {
 
         //Создание директории в домашней папке
         String homeDir = System.getProperty("user.home");
-        String folderPath = homeDir + File.separator + "crypto_logos";
+        String folderPath = STR."\{homeDir}\{File.separator}crypto_logos";
         File folder = new File(folderPath);
         if (!folder.exists()) {
-            folder.mkdirs();
+            if (!folder.mkdirs()) {
+                System.err.println(STR."Failed to create directory: \{folderPath}");
+                return;
+            }
         }
 
         //Загрузка логотипов
@@ -125,15 +128,15 @@ public class CryptoCompareService {
 
             if (logoUrl != null && !logoUrl.isEmpty()) {
                 try (InputStream in = new URL(logoUrl).openStream();
-                     FileOutputStream out = new FileOutputStream(folderPath + File.separator + symbol + ".png")) {
+                     FileOutputStream out = new FileOutputStream(STR."\{folderPath}\{File.separator}\{symbol}.png")) {
                     byte[] buffer = new byte[1024];
                     int bytesRead;
                     while ((bytesRead = in.read(buffer)) != -1) {
                         out.write(buffer, 0, bytesRead);
                     }
-                    System.out.println("Downloaded logo for " + symbol);
+                    System.out.println(STR."Downloaded logo for \{symbol}");
                 } catch (Exception e) {
-                    System.out.println("Failed to download logo for " + symbol + ": " + e.getMessage());
+                    System.out.println(STR."Failed to download logo for \{symbol}: \{e.getMessage()}");
                 }
             }
         }
