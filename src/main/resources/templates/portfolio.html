@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Портфель</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <style>
+        .profit-positive {
+            color: green;
+        }
+        .profit-negative {
+            color: red;
+        }
+        .profit-neutral {
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Портфель</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Тикер</th>
+            <th>Категория</th>
+            <th>Цена покупки (RUB)</th>
+            <th>Цена покупки (USD)</th>
+            <th>Количество</th>
+            <th>Текущая цена (RUB)</th>
+            <th>Текущая цена (USD)</th>
+            <th>Прибыль (RUB)</th>
+            <th>Прибыль (USD)</th>
+            <th>Общая стоимость (RUB)</th>
+            <th>Общая стоимость (USD)</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="asset : ${assets}">
+            <td th:text="${asset.name}"></td>
+            <td th:text="${asset.ticker}"></td>
+            <td th:text="${asset.category}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.averagePurchasePriceRub, 1, 2)}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.averagePurchasePriceUsd, 1, 2)}"></td>
+            <td th:text="${asset.totalQuantity}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.currentPriceRub, 1, 2)}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.currentPriceUsd, 1, 2)}"></td>
+            <td>
+                <span th:if="${profitRub[asset.ticker] > 0}" th:text="|${#numbers.formatDecimal(profitRub[asset.ticker], 1, 2)} %|" class="profit-positive"></span>
+                <span th:if="${profitRub[asset.ticker] < 0}" th:text="|${#numbers.formatDecimal(profitRub[asset.ticker], 1, 2)} %|" class="profit-negative"></span>
+                <span th:if="${profitRub[asset.ticker] == 0}" th:text="|${#numbers.formatDecimal(profitRub[asset.ticker], 1, 2)} %|" class="profit-neutral"></span>
+            </td>
+            <td>
+                <span th:if="${profitUsd[asset.ticker] > 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.ticker], 1, 2)} %|" class="profit-positive"></span>
+                <span th:if="${profitUsd[asset.ticker] < 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.ticker], 1, 2)} %|" class="profit-negative"></span>
+                <span th:if="${profitUsd[asset.ticker] == 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.ticker], 1, 2)} %|" class="profit-neutral"></span>
+            </td>
+            <td th:text="${#numbers.formatDecimal(asset.totalQuantity * asset.currentPriceRub, 1, 2)}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.totalQuantity * asset.currentPriceUsd, 1, 2)}"></td>
+            <td>
+                <form th:action="@{/portfolio/delete/{name}(name=${asset.name})}" method="post">
+                    <button type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <h3>Общая стоимость портфеля</h3>
+        <p>Общая стоимость (RUB):
+            <span th:text="${totalValueRub}"></span>
+            <span th:if="${portfolioChangePercentRub > 0}" th:classappend="' profit-positive'" th:text="${'(+' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
+            <span th:if="${portfolioChangePercentRub < 0}" th:classappend="' profit-negative'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
+            <span th:if="${portfolioChangePercentRub == 0}" th:classappend="' profit-neutral'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
+        </p>
+        <p>Общая стоимость (USD):
+            <span th:text="${totalValueUsd}"></span>
+            <span th:if="${portfolioChangePercentUsd > 0}" th:classappend="' profit-positive'" th:text="${'(+' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
+            <span th:if="${portfolioChangePercentUsd < 0}" th:classappend="' profit-negative'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
+            <span th:if="${portfolioChangePercentUsd == 0}" th:classappend="' profit-neutral'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
+        </p>
+    </div>
+
+    <a th:href="@{/portfolio/add}" class="btn btn-primary">Добавить новый актив</a>
+</div>
+</body>
+</html>

@@ -7,7 +7,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,9 +35,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/").permitAll()
-                        .requestMatchers("/**").authenticated())
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/register", "/", "/favicon.ico").permitAll()
+                        .requestMatchers("/main", "/add", "/actives",  "/portfolio/**").authenticated()
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .defaultSuccessUrl("/portfolio", true)
+                        .permitAll())
                 .build();
     }
     @Bean

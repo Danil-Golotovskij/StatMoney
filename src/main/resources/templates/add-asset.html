@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавить актив</title>
+</head>
+<body>
+<h1>Добавить актив</h1>
+<form th:action="@{/portfolio/add}" th:object="${asset}" method="post">
+    <div>
+        <label for="name">Название:</label>
+        <input type="text" id="name" th:field="*{name}" required />
+    </div>
+    <div>
+        <label for="category">Категория:</label>
+        <input type="text" id="category" th:field="*{category}" required />
+    </div>
+    <div>
+        <label for="purchasePriceRub">Цена покупки (RUB):</label>
+        <input type="number" id="purchasePriceRub" th:field="*{purchasePriceRub}" required />
+    </div>
+    <div>
+        <label for="purchasePriceUsd">Цена покупки (USD):</label>
+        <input type="number" id="purchasePriceUsd" th:field="*{purchasePriceUsd}" required />
+    </div>
+    <div>
+        <label for="quantity">Количество:</label>
+        <input type="number" id="quantity" th:field="*{quantity}" required />
+    </div>
+    <div>
+        <button type="submit">Добавить актив</button>
+    </div>
+</form>
+<a th:href="@{/portfolio}">Назад к портфелю</a>
+</body>
+</html>
