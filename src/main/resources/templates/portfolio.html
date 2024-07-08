@@ -126,7 +126,7 @@
             <td th:text="${asset.category}"></td>
             <td th:text="${#numbers.formatDecimal(asset.averagePurchasePriceRub, 1, 2)}"></td>
             <td th:text="${#numbers.formatDecimal(asset.averagePurchasePriceUsd, 1, 2)}"></td>
-            <td th:text="${asset.totalQuantity}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.totalQuantity, 1, 2)}"></td>
             <td th:text="${#numbers.formatDecimal(asset.currentPriceRub, 1, 2)}"></td>
             <td th:text="${#numbers.formatDecimal(asset.currentPriceUsd, 1, 2)}"></td>
             <td>
@@ -171,85 +171,9 @@
     <a th:href="@{/portfolio/add}" class="btn btn-primary">Добавить новый актив</a>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteConfirmModalLabel">Подтверждение удаления</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Вы действительно хотите удалить этот актив? Это действие невозможно будет отменить.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Удалить</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
-    //Получаем ссылку на кнопку "Удалить"
-const deleteButtons = document.querySelectorAll('.delete-btn');
-
-// Добавляем обработчик события клика на каждую кнопку "Удалить"
-deleteButtons.forEach(button => {
-    button.addEventListener('click', (event) => {
-        event.preventDefault(); // Предотвращаем стандартное поведение кнопки
-        const assetName = event.target.closest('tr').querySelector('td:first-child').textContent;
-        const deleteUrl = `/portfolio/delete/${assetName}`;
-
-        // Открываем модальное окно
-        const deleteConfirmModal = document.getElementById('deleteConfirmModal');
-        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
-        confirmDeleteButton.addEventListener('click', () => {
-            // Отправляем POST-запрос на удаление актива
-            fetch(deleteUrl, {
-                method: 'POST'
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Перезагружаем страницу после успешного удаления
-                    window.location.reload();
-                } else {
-                    alert('Произошла ошибка при удалении актива.');
-                }
-            })
-            .catch(error => {
-                alert('Произошла ошибка при удалении актива.');
-                console.error(error);
-            });
-        });
-
-        // Открываем модальное окно
-        const deleteConfirmModalInstance = new bootstrap.Modal(deleteConfirmModal);
-        deleteConfirmModalInstance.show();
-
-        // Проверяем, нажата ли кнопка "Удалить" в модальном окне
-        confirmDeleteButton.addEventListener('click', () => {
-            // Отправляем POST-запрос на удаление актива
-            fetch(deleteUrl, {
-                method: 'POST'
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Перезагружаем страницу после успешного удаления
-                    window.location.reload();
-                } else {
-                    alert('Произошла ошибка при удалении актива.');
-                }
-            })
-            .catch(error => {
-                alert('Произошла ошибка при удалении актива.');
-                console.error(error);
-            });
-        });
-    });
-});
 </script>
 
 </body>
