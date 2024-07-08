@@ -109,7 +109,7 @@ public class PortfolioController {
         } else {
             model.addAttribute("message", "No portfolio found for user");
         }
-
+        model.addAttribute("user", user);
         return "portfolio";
     }
 

@@ -12,6 +12,4 @@ public class AggregatedAsset {
     private double totalQuantity;
     private float currentPriceRub;
     private float currentPriceUsd;
-
-    // Lombok будет автоматически генерировать геттеры и сеттеры
 }
