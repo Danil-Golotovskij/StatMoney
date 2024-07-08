@@ -1,0 +1,20 @@
+services:
+   spring-app:
+     build:
+       context: .
+       dockerfile: Dockerfile
+     restart: always
+     depends_on:
+       - postgres
+     ports:
+       - 8080:8080
+   postgres:
+     image: postgres:latest
+     environment:
+       - POSTGRES_DB=stat_money
+       - POSTGRES_USER=postgres
+       - POSTGRES_PASSWORD=postgres
+     volumes:
+       - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
