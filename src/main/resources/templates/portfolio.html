@@ -13,11 +13,94 @@
         .profit-neutral {
             color: gray;
         }
+        .delete-btn {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            border-radius: 5px;
+            color: #fff;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
     </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
-<body>
+
+<body class="container bg-body-tertiary">
+
+<nav class="navbar navbar-expand-lg bg-white rounded">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/stats">Stat money</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/dashboard">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/stats">Аналитика</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/portfolio">Портфель</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/tools">Инструменты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/community">Сообщество</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Мой портфель
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        USD
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <button class="btn btn-outline-success me-2" type="submit">В</button>
+            <button class="btn btn-outline-success" type="submit">Р</button>
+            <a href="/profile"><img width="24" height="24" class="d-inline-block align-text-top"
+                                    src="https://pic.onlinewebfonts.com/svg/img_243887.svg"></a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-3">
+    <h1>Портфель <span th:text="${user.email}"></span></h1>
+</div>
 <div class="container">
-    <h1>Портфель</h1>
     <table class="table">
         <thead>
         <tr>
@@ -43,7 +126,7 @@
             <td th:text="${asset.category}"></td>
             <td th:text="${#numbers.formatDecimal(asset.averagePurchasePriceRub, 1, 2)}"></td>
             <td th:text="${#numbers.formatDecimal(asset.averagePurchasePriceUsd, 1, 2)}"></td>
-            <td th:text="${asset.totalQuantity}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.totalQuantity, 1, 2)}"></td>
             <td th:text="${#numbers.formatDecimal(asset.currentPriceRub, 1, 2)}"></td>
             <td th:text="${#numbers.formatDecimal(asset.currentPriceUsd, 1, 2)}"></td>
             <td>
@@ -60,7 +143,7 @@
             <td th:text="${#numbers.formatDecimal(asset.totalQuantity * asset.currentPriceUsd, 1, 2)}"></td>
             <td>
                 <form th:action="@{/portfolio/delete/{name}(name=${asset.name})}" method="post">
-                    <button type="submit">Удалить</button>
+                    <button type="submit" class="delete-btn">Удалить</button>
                 </form>
             </td>
         </tr>
@@ -70,20 +153,28 @@
     <div>
         <h3>Общая стоимость портфеля</h3>
         <p>Общая стоимость (RUB):
-            <span th:text="${totalValueRub}"></span>
-            <span th:if="${portfolioChangePercentRub > 0}" th:classappend="' profit-positive'" th:text="${'(+' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
-            <span th:if="${portfolioChangePercentRub < 0}" th:classappend="' profit-negative'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
-            <span th:if="${portfolioChangePercentRub == 0}" th:classappend="' profit-neutral'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
+            <span th:text="${totalValueRub == null ? '0' : totalValueRub}"></span>
+            <span th:if="${totalValueRub > 0 and portfolioChangePercentRub > 0}" th:classappend="' profit-positive'" th:text="${'(+' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
+            <span th:if="${totalValueRub > 0 and portfolioChangePercentRub < 0}" th:classappend="' profit-negative'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
+            <span th:if="${totalValueRub > 0 and portfolioChangePercentRub == 0}" th:classappend="' profit-neutral'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentRub, 1, 2) + ' %)'}"></span>
+            <span th:if="${totalValueRub == 0}" class="profit-neutral">0 %</span>
         </p>
         <p>Общая стоимость (USD):
-            <span th:text="${totalValueUsd}"></span>
-            <span th:if="${portfolioChangePercentUsd > 0}" th:classappend="' profit-positive'" th:text="${'(+' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
-            <span th:if="${portfolioChangePercentUsd < 0}" th:classappend="' profit-negative'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
-            <span th:if="${portfolioChangePercentUsd == 0}" th:classappend="' profit-neutral'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
+            <span th:text="${totalValueUsd == null ? '0' : totalValueUsd}"></span>
+            <span th:if="${totalValueUsd > 0 and portfolioChangePercentUsd > 0}" th:classappend="' profit-positive'" th:text="${'(+' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
+            <span th:if="${totalValueUsd > 0 and portfolioChangePercentUsd < 0}" th:classappend="' profit-negative'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
+            <span th:if="${totalValueUsd > 0 and portfolioChangePercentUsd == 0}" th:classappend="' profit-neutral'" th:text="${'(' + #numbers.formatDecimal(portfolioChangePercentUsd, 1, 2) + ' %)'}"></span>
+            <span th:if="${totalValueUsd == 0}" class="profit-neutral">0 %</span>
         </p>
     </div>
 
     <a th:href="@{/portfolio/add}" class="btn btn-primary">Добавить новый актив</a>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
+
 </body>
 </html>
