@@ -13,7 +13,7 @@
 
 <body class="container">
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary rounded">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Stat money</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -82,13 +82,14 @@
 <div class="container mt-3">
     <div class="row d-flex">
         <div class="justify-content-center">
-            <h5>Добавление актива </h5>
-            <td th:text="${user.id}"/>
+            <h5>Добавление облигации </h5>
+            <td th:text="${user.id}" />
             <div class="col-md-4">
-                <li class="nav-item dropdown" style="list-style-type: none;">
+
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        <span class="fw-bold">Выберите тип актива:</span>
+                        Тип актива
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="?type=share">Акция</a></li>
@@ -97,6 +98,103 @@
                     </ul>
                 </li>
 
+
+                <form action="/add" method="post">
+
+                    <!--
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Актив/Компания"
+                            aria-label="Имя пользователя" aria-describedby="basic-addon1">
+                    </div>
+
+                    <div class="input-group mb-5">
+                        <label class="input-group-text" for="inputGroupSelect01">Тип актива:</label>
+                        <select class="form-select" id="inputGroupSelect01">
+                            <option value="1"><a href="#">Акция</a></option>
+                            <option value="2">Облигация</option>
+                            <option value="2">Криптовалюта</option>
+                        </select>
+                    </div>
+
+
+                    <div class="input-group mb-5">
+                        <label class="input-group-text" for="inputGroupSelect01">Актив:</label>
+
+                        <select class="form-select" id="inputGroupSelect01">
+                            <tr th:each="share : ${shares}">
+                                <option th:text="${{share.name}}">Акция</option>
+                            </tr>
+                        </select>
+                    </div>
+                    -->
+
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Мой портфель
+                        </a>
+                        <ul class="dropdown-menu">
+                            <tr th:each="share : ${shares}">
+                                <li><a th:text="${{share.name}}" class="dropdown-item" href="#">Action</a></li>
+                            </tr>
+                        </ul>
+                    </li>
+
+
+
+                    <div class="input-group mb-5">
+                        <label class="input-group-text" for="inputGroupSelect01">Операция:</label>
+                        <select class="form-select" id="inputGroupSelect01">
+                            <option value="1">Покупка</option>
+                            <option value="2">Продажа</option>
+                        </select>
+
+
+                        <label class="input-group-text" for="inputGroupSelect01">Дата:</label>
+                        <label>Select Date: </label>
+                        <div id="datepicker" class="input-group date" data-date-format="mm-dd-yyyy">
+                            <input class="form-control" type="text" readonly />
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Кол-во, шт."
+                               aria-label="Имя пользователя" aria-describedby="basic-addon1">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Цена" aria-label="Имя пользователя"
+                               aria-describedby="basic-addon1">
+
+                        <label class="input-group-text" for="inputGroupSelect01">Валюта:</label>
+                        <select class="form-select" id="inputGroupSelect01">
+                            <option value="1">RUB</option>
+                            <option value="2">USD</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Комиссия" aria-label="Имя пользователя"
+                               aria-describedby="basic-addon1">
+
+                        <label class="input-group-text" for="inputGroupSelect01">Валюта:</label>
+                        <select class="form-select" id="inputGroupSelect01">
+                            <option value="1">RUB</option>
+                            <option value="2">USD</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-text">Примечание</span>
+                        <textarea class="form-control" aria-label="С текстовым полем"></textarea>
+                    </div>
+
+                    <div class="input-group mt-3">
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
