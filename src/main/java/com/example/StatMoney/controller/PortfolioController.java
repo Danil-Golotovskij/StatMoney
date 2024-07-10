@@ -115,15 +115,19 @@ public class PortfolioController {
 
     @GetMapping("/portfolio/add")
     public String showAddAssetForm(Model model) {
-        model.addAttribute("asset", new Asset());
+        //model.addAttribute("asset", new Asset());
         return "add-asset";
     }
 
     @PostMapping("/portfolio/add")
     public String addAsset(@ModelAttribute Asset asset) {
-        assetService.addAsset(asset);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails myUserDetails = (MyUserDetails) auth.getPrincipal();
+        User user = myUserDetails.getUser();
+        //assetService.addAsset(asset, user);
         return "redirect:/portfolio";
     }
+
 
     @PostMapping("/portfolio/delete/{name}")
     public String deleteAssetsByName(@PathVariable String name) {
