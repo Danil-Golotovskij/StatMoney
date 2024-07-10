@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register", "/", "/favicon.ico").permitAll()
-                        .requestMatchers("/main", "/add", "/actives",  "/portfolio/**").authenticated()
+                        .requestMatchers("/main", "/add", "/actives",  "/portfolio/**, /profile/**").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .defaultSuccessUrl("/portfolio", true)
