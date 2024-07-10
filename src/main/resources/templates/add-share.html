@@ -80,11 +80,10 @@
 </nav>
 
 <div class="container mt-3">
-    <div class="row d-flex">
-        <div class="justify-content-center">
-            <h5>Добавление акции</h5>
+    <div class="row">
+        <div class="d-flex justify-content-center">
             <div class="col-md-4">
-
+                <h5>Добавление акции</h5>
                 <form action="/add" method="post">
 
                     <div class="input-group mb-3">
@@ -94,6 +93,11 @@
                                 <option th:text="${{share.name}}" th:value="${{share.name}}">Покупка</option>
                             </tr>
                         </select>
+                    </div>
+
+                    <div class="input-group d-none">
+                        <input type="text" class="form-control" placeholder="Кол-во, шт." name="type"
+                               aria-label="Имя пользователя" aria-describedby="basic-addon1" th:value="share">
                     </div>
 
                     <div class="input-group mb-3">

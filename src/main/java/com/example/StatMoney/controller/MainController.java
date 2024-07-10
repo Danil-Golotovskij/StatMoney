@@ -27,6 +27,9 @@ public class MainController {
     MoexService moexService;
 
     @Autowired
+    CbrService cbrService;
+
+    @Autowired
     CryptoCompareService cryptoCompareService;
 
     @Autowired
@@ -60,6 +63,7 @@ public class MainController {
                     return "add-share";
                 case "bond":
                     System.out.println("Bond");
+                    //System.out.println(moexService.getAllSecurities("bonds"));
                     model.addAttribute("bonds", moexService.getAllSecurities("bonds"));
                     return "add-bond";
                 case "crypt":
@@ -69,26 +73,35 @@ public class MainController {
                 default:
                     break;
             }
-        } else {
-
         }
-        //List<Map<String, String>> qwe = moexService.getAllSecurities("shares");
-        //System.out.println(cryptoCompareService.getAllCryptocurrencies());
-        //System.out.println(moexService.getAllSecurities("shares"));
-        //System.out.println(moexService.getAllSecurities("bonds"));
-        System.out.println(type);
         return "add-active";
     }
 
     @PostMapping("/add")
-    String getActive(@RequestParam String name, String quantity, String price)
-    {
+    String getActive(@RequestParam String name, String type, String quantity, String price) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails myUserDetails = (MyUserDetails) auth.getPrincipal();
         User user = myUserDetails.getUser();
-        assetService.addAsset(new Asset(null, ), user);
-        System.out.println(name + " " + quantity + " " + price + " Price FROM POST!");
+
+        double dollar = cbrService.getCurrentCurrencyRate("USD");
+
+        switch (type) {
+            case "share":
+                assetService.addAsset(new Asset(null, null, name, "Акция", Double.parseDouble(price),
+                        Double.parseDouble(price) * dollar, Double.parseDouble(quantity)), user);
+                break;
+            case "bond":
+                assetService.addAsset(new Asset(null, null, name, "Облигация", Double.parseDouble(price),
+                        Double.parseDouble(price) * dollar, Double.parseDouble(quantity)), user);
+                break;
+            case "crypt":
+                assetService.addAsset(new Asset(null, null, name, "Криптовалюта", Double.parseDouble(price),
+                        Double.parseDouble(price) * dollar, Double.parseDouble(quantity)), user);
+                break;
+        }
+
+        System.out.println(name + " " + type + " " + quantity + " " + price + " FROM POST!");
 
         return "redirect:/portfolio";
     }
