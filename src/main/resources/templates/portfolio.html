@@ -126,7 +126,7 @@
             <td th:text="${asset.category}"></td>
             <td th:text="${#numbers.formatDecimal(asset.averagePurchasePriceRub, 1, 2)}"></td>
             <td th:text="${#numbers.formatDecimal(asset.averagePurchasePriceUsd, 1, 2)}"></td>
-            <td th:text="${#numbers.formatDecimal(asset.totalQuantity, 1, 2)}"></td>
+            <td th:text="${asset.totalQuantity % 1 == 0 ? #numbers.formatInteger(asset.totalQuantity, 1, 'COMMA') : #numbers.formatDecimal(asset.totalQuantity, 1, 'COMMA', 9, 'POINT')}"></td>
             <td th:text="${#numbers.formatDecimal(asset.currentPriceRub, 1, 2)}"></td>
             <td th:text="${#numbers.formatDecimal(asset.currentPriceUsd, 1, 2)}"></td>
             <td>

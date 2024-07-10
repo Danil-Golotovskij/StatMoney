@@ -3,6 +3,7 @@ package com.example.StatMoney.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,11 +15,11 @@ public class Portfolio {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "idUser", referencedColumnName = "id")
+    @JoinColumn(name = "id_user", referencedColumnName = "id")
     private User user;
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Asset> assets;
+    private List<Asset> assets = new ArrayList<>();
 
     private double totalValueRub;               // Общая стоимость в рублях
     private double totalValueUsd;               // Общая стоимость в долларах
@@ -31,4 +32,14 @@ public class Portfolio {
 
     private double totalSoldAssetsValueRub;     // Общая стоимость проданных активов в рублях
     private double totalSoldAssetsValueUsd;     // Общая стоимость проданных активов в долларах
+
+    public void addAsset(Asset asset) {
+        assets.add(asset);
+        asset.setPortfolio(this);
+    }
+
+    public void removeAsset(Asset asset) {
+        assets.remove(asset);
+        asset.setPortfolio(null);
+    }
 }
