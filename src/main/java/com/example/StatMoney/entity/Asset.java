@@ -5,20 +5,20 @@ import lombok.Data;
 
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)   // Наследование ьазовых атрибутов подклассами
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="assets")
 public class Asset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
-    @JoinColumn(name = "idPortfolio")
+    @JoinColumn(name = "id_portfolio")
     private Portfolio portfolio;
-
     private String name;
     private String category;
-    private double purchasePriceRub;             // Цена покупки в рублях
-    private double purchasePriceUsd;             // Цена покупки в долларах
-    private double quantity;                    // Количество
+    private double purchasePriceRub;
+    private double purchasePriceUsd;
+    private double quantity;
 }
+
+
