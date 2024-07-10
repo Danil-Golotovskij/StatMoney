@@ -1,6 +1,8 @@
 package com.example.StatMoney.service;
 
+import com.example.StatMoney.entity.Portfolio;
 import com.example.StatMoney.entity.User;
+import com.example.StatMoney.repository.PortfolioRepository;
 import com.example.StatMoney.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +27,9 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private PortfolioRepository portfolioRepository;
+
     public void saveUser(User user) {
         if (!isValidEmail(user.getEmail())) {
             throw new IllegalArgumentException("Неверный формат email");
@@ -41,6 +46,17 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userRepository.save(user);
+        Portfolio portfolio = new Portfolio();
+        portfolio.setUser(user);
+        portfolio.setTotalValueRub(0.0);
+        portfolio.setTotalValueUsd(0.0);
+        portfolio.setTotalProfitLossRub(0.0);
+        portfolio.setTotalProfitLossUsd(0.0);
+        portfolio.setAverageDailyIncomeRub(0.0);
+        portfolio.setAverageDailyIncomeUsd(0.0);
+        portfolio.setTotalSoldAssetsValueRub(0.0);
+        portfolio.setTotalSoldAssetsValueUsd(0.0);
+        portfolioRepository.save(portfolio);
     }
 
     public boolean isValidEmail(String email) {
@@ -105,6 +121,5 @@ public class UserService {
             Files.deleteIfExists(path);
         }
     }
-
 
 }
