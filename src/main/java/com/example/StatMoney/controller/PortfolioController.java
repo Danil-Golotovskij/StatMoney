@@ -115,7 +115,7 @@ public class PortfolioController {
 
     @GetMapping("/portfolio/add")
     public String showAddAssetForm(Model model) {
-        model.addAttribute("asset", new Asset());
+        //model.addAttribute("asset", new Asset());
         return "add-asset";
     }
 
@@ -124,7 +124,7 @@ public class PortfolioController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails myUserDetails = (MyUserDetails) auth.getPrincipal();
         User user = myUserDetails.getUser();
-        assetService.addAsset(asset, user);
+        //assetService.addAsset(asset, user);
         return "redirect:/portfolio";
     }
 

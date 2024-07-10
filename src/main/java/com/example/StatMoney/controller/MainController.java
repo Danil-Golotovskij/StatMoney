@@ -7,6 +7,7 @@ import com.example.StatMoney.repository.BondRepository;
 import com.example.StatMoney.repository.CryptRepository;
 import com.example.StatMoney.repository.ShareRepository;
 import com.example.StatMoney.service.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -64,7 +65,6 @@ public class MainController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails myUserDetails = (MyUserDetails) auth.getPrincipal();
         User user = myUserDetails.getUser();
-        model.addAttribute("user", user);
 
         if (type != null) {
             switch (type) {
@@ -92,25 +92,48 @@ public class MainController {
         User user = myUserDetails.getUser();
 
         double dollar = cbrService.getCurrentCurrencyRate("USD");
+        double purchasePriceUsd = Double.parseDouble(price) / dollar;
+
+        Asset asset = new Asset(null, null, name, getAssetCategory(type), Double.parseDouble(price), purchasePriceUsd, Double.parseDouble(quantity));
+        Asset savedAsset = assetService.addAsset(asset, user);
 
         switch (type) {
             case "share":
-                assetService.addAsset(new Asset(null, null, name, "Акция", Double.parseDouble(price),
-                        Double.parseDouble(price) / dollar, Double.parseDouble(quantity)), user);
-                shareRepository.save(new Share(ticker));
+                Share share = new Share();
+                BeanUtils.copyProperties(savedAsset, share);
+                share.setTicker(ticker);
+                shareRepository.save(share);
                 break;
             case "bond":
-                assetService.addAsset(new Asset(null, null, name, "Облигация", Double.parseDouble(price),
-                        Double.parseDouble(price) / dollar, Double.parseDouble(quantity)), user);
-                bondRepository.save(new Bond(ticker));
+                Bond bond = new Bond();
+                BeanUtils.copyProperties(savedAsset, bond);
+                bond.setTicker(ticker);
+                bondRepository.save(bond);
                 break;
             case "crypt":
-                assetService.addAsset(new Asset(null, null, name, "Криптовалюта", Double.parseDouble(price),
-                        Double.parseDouble(price) / dollar, Double.parseDouble(quantity)), user);
-                cryptRepository.save(new Cryptocurrency(ticker));
+                Cryptocurrency crypto = new Cryptocurrency();
+                BeanUtils.copyProperties(savedAsset, crypto);
+                crypto.setTicker(ticker);
+                cryptRepository.save(crypto);
                 break;
         }
+
         return "redirect:/portfolio";
     }
+
+
+    private String getAssetCategory(String type) {
+        switch (type) {
+            case "share":
+                return "Акция";
+            case "bond":
+                return "Облигация";
+            case "crypt":
+                return "Криптовалюта";
+            default:
+                return "Unknown";
+        }
+    }
+
 
 }
